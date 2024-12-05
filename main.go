@@ -17,11 +17,9 @@ var posts []Post // it's in-memory slice to store our submitted posts
 func main() {
 	// handler := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/", handleIndex)
-	// http.HandleFunc("/submit", handleSubmit)
-
-	fmt.Println("showing your bullshit on localhost:8080")
+	http.HandleFunc("/submit", handleSubmit)
+	fmt.Println("showing your bullshit on http://localhost:8080")
 	// http.ListenAndServe(":8080", handler)
-	println(posts)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -36,7 +34,9 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 
 func handleSubmit(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
+	fmt.Println("title:", title)
 	project := r.FormValue("project")
+	fmt.Println("project:", project)
 
 	post := Post{
 		Title:   title,

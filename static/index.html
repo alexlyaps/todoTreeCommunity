@@ -34,12 +34,23 @@
 <body>
     <section>
         <div class="form">
-            <form action="">
+            <form id="submitButton" action="/submit" method="POST">
                 <label for="title">Title: <input type="text" id='title' name="title" placeholder="Your project's title"></label>
                 <label for="project">Project: <textarea name="project" id="project" rows="14" cols="25" placeholder="What's on your mind"></textarea></label>
                 <button type="submit">Publish</button>                
             </form>
         </div>
     </section>
+    <script>
+    document.getElementById("submitButton").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get the value from the input field
+        const inputValue = document.getElementById("submitButton").value;
+
+        // Send the value to the server using AJAX or form submission
+        // Here, we'll use a simple form submission:
+        document.getElementById("submitButton").submit(); });
+    </script>
 </body>
 </html>
