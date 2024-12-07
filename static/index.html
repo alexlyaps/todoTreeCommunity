@@ -81,7 +81,7 @@
         const formData = new FormData(form);
 
         // Отправляем форму
-        fetch(form.action, {
+        fetch('/submit', {
             method: 'POST',
             body: formData
         })
