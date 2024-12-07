@@ -9,22 +9,32 @@
         body {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 18px;
-            background-color: rgba(255, 255, 255, 0.89);
+            background-color: rgba(59, 51, 51, 0.89);
             margin: 0;
         }
-        div.form {
+    
+        .submit-form-container {
             box-sizing: border-box;
             width: 250px;
             height: 400px;
-            background-color: aliceblue;            
+            background-color: rgb(112, 230, 181);            
             margin: 100px auto 0 auto;
             border-radius: 10px;
+            box-shadow: 0px 0px 10px rgb(62, 119, 84);
         }
+    
         form {
             padding: 10%;
         }
+    
         input {
             display: block;
+        }
+
+        .forms-container {
+            margin: 0 20%;
+            display: flex;
+            flex-wrap: wrap;            
         }
 
 
@@ -32,25 +42,65 @@
     </style>
 </head>
 <body>
-    <section>
-        <div class="form">
-            <form id="submitButton" action="/submit" method="POST">
-                <label for="title">Title: <input type="text" id='title' name="title" placeholder="Your project's title"></label>
-                <label for="project">Project: <textarea name="project" id="project" rows="14" cols="25" placeholder="What's on your mind"></textarea></label>
-                <button type="submit">Publish</button>                
-            </form>
+    <section class="forms-container">
+        <div class="submit-form-container">
+            <form class="submit-form" action="/submit" method="POST">
+                <label for="title">Title: <input type="text" name="title" placeholder="Your project's title"></label>
+                <label for="project">Project: <textarea name="project" rows="14" cols="25" placeholder="What's on your mind"></textarea></label>
+                <button type="submit" class="add-form-btn">Publish</button>                
+            </form> 
         </div>
     </section>
     <script>
-    document.getElementById("submitButton").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent default form submission
+    // Функция для добавления новой формы
+    const makeField = function() {
+        const section = document.querySelector('.forms-container');
+        section.innerHTML += `<div class="submit-form-container">
+            <form class="submit-form" action="/submit" method="POST">
+                <label for="title">Title: <input type="text" name="title" placeholder="Your project's title"></label>
+                <label for="project">Project: <textarea name="project" rows="14" cols="25" placeholder="What's on your mind"></textarea></label>
+                <button type="button" class="add-form-btn">Publish</button>                
+            </form> 
+        </div>`;
+        attachEventListeners();
+    };
 
-        // Get the value from the input field
-        const inputValue = document.getElementById("submitButton").value;
+    // Функция для привязки событий к кнопкам
+    const attachEventListeners = function() {
+        const buttons = document.querySelectorAll('.add-form-btn');
+        buttons.forEach(button => {
+            button.removeEventListener('click', handleButtonClick); // Убираем дубли
+            button.addEventListener('click', handleButtonClick);
+        });
+    };
 
-        // Send the value to the server using AJAX or form submission
-        // Here, we'll use a simple form submission:
-        document.getElementById("submitButton").submit(); });
+    // Обработчик события при нажатии на "Publish"
+    const handleButtonClick = function(event) {
+        event.preventDefault(); // Блокируем стандартное поведение для обработки
+        const form = event.target.closest('form');
+        const formData = new FormData(form);
+
+        // Отправляем форму
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Form submitted successfully');
+            } else {
+                console.error('Form submission failed');
+            }
+        })
+        .catch(error => console.error('Error:', error))
+        .finally(makeField); // Добавляем новую форму после отправки ИЛИ НЕОТПРАВКИ
+        
+    };
+
+    // Привязываем события после загрузки страницы
+    attachEventListeners();
     </script>
+</body>
+
 </body>
 </html>
